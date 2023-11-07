@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:sk_newsletterhelper/Resources/Private/Language/locallang_db.xlf" date="2023-10-27T15:40:03Z" product-name="sk_newsletterhelper">
+		<header/>
+		<body>
+			<trans-unit id="tx_sknewsletterhelper_domain_model_newsletterhelper" resname="tx_sknewsletterhelper_domain_model_newsletterhelper">
+				<source>Newsletter Helper</source>
+			</trans-unit>
+			<trans-unit id="tx_sknewsletterhelper_domain_model_newsletterhelper.description" resname="tx_sknewsletterhelper_domain_model_newsletterhelper.description">
+				<source>Newsletter Helper</source>
+			</trans-unit>
+			<trans-unit id="tx_sk_newsletterhelper_newsletterhelper.name" resname="tx_sk_newsletterhelper_newsletterhelper.name">
+				<source>NewsletterHelper</source>
+			</trans-unit>
+			<trans-unit id="tx_sk_newsletterhelper_newsletterhelper.description" resname="tx_sk_newsletterhelper_newsletterhelper.description">
+				<source></source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

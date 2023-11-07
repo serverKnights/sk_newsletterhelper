@@ -1,0 +1,14 @@
+plugin.tx_sknewsletterhelper_newsletterhelper {
+    view {
+        # cat=plugin.tx_sknewsletterhelper_newsletterhelper/file; type=string; label=Path to template root (FE)
+        templateRootPath = EXT:sk_newsletterhelper/Resources/Private/Templates/
+        # cat=plugin.tx_sknewsletterhelper_newsletterhelper/file; type=string; label=Path to template partials (FE)
+        partialRootPath = EXT:sk_newsletterhelper/Resources/Private/Partials/
+        # cat=plugin.tx_sknewsletterhelper_newsletterhelper/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = EXT:sk_newsletterhelper/Resources/Private/Layouts/
+    }
+    persistence {
+        # cat=plugin.tx_sknewsletterhelper_newsletterhelper//a; type=string; label=Default storage PID
+        storagePid =
+    }
+}

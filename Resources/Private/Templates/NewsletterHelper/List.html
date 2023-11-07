@@ -1,0 +1,25 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+
+<f:section name="content">
+    <h1>Listing for NewsletterHelper</h1>
+
+    <f:flashMessages />
+
+    <table class="tx_sknewsletterhelper">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        <f:for each="{newsletterHelpers}" as="newsletterHelper">
+            <tr>
+                <td><f:link.action action="edit" arguments="{newsletterHelper : newsletterHelper}">Edit</f:link.action></td>
+                <td><f:link.action action="delete" arguments="{newsletterHelper : newsletterHelper}">Delete</f:link.action></td>
+            </tr>
+        </f:for>
+    </table>
+
+    <f:link.action action="new">New NewsletterHelper</f:link.action>
+</f:section>
+</html>

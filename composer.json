@@ -1,0 +1,49 @@
+{
+    "name": "serverknights/sk-newsletterhelper",
+    "type": "typo3-cms-extension",
+    "description": "",
+    "authors": [
+        {
+            "name": "Bicha Stefan",
+            "role": "Developer"
+        }
+    ],
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "typo3/cms-core": "^11.5"
+    },
+    "require-dev": {
+        "typo3/testing-framework": "^6.9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ServerKnights\\SkNewsletterhelper\\": "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ServerKnights\\SkNewsletterhelper\\Tests\\": "Tests"
+        }
+    },
+    "replace": {
+        "typo3-ter/sk-newsletterhelper": "self.version"
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+        ],
+        "post-update-cmd": [
+            "npm install"
+        ]
+    },
+    "extra": {
+        "typo3/cms": {
+            "web-dir": ".Build/Web",
+            "extension-key": "sk_newsletterhelper"
+        },
+    }
+}
