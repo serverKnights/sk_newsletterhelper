@@ -12,3 +12,13 @@ plugin.tx_sknewsletterhelper_newsletterhelper {
         storagePid =
     }
 }
+module.tx_sknewsletterhelper_newsletterhelpermodule {
+    view {
+        templateRootPaths {
+            10 = EXT:sk_newsletterhelper/Resources/Private/Backend/Templates/
+        }
+        layoutRootPaths {
+            10 = EXT:sk_newsletterhelper/Resources/Private/Backend/Layouts/
+        }
+    }
+}

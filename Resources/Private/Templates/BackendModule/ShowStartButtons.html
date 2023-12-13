@@ -1,0 +1,27 @@
+<html
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+        xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+        data-namespace-typo3-fluid="true">
+
+<f:layout name="ModuleLayout" />
+
+<f:section name="Content">
+    <h1>Hallo Welt</h1>
+    <a href="{f:uri.action(action: 'verifyNPM', controller: 'BackendModule')}">
+        <button>Scan Npm Path</button>
+    </a>
+
+    <f:if condition="{isNpmPresent}">
+        <f:then>
+            <p style="color: green">Npm found under {npmPath}</p>
+        </f:then>
+    </f:if>
+    <f:if condition="{isNpmPresent} === false">
+        <f:then>
+            <p style="color: red">Please install npm on your system</p>
+        </f:then>
+    </f:if>
+</f:section>
+
+</html>

@@ -44,6 +44,6 @@
         "typo3/cms": {
             "web-dir": ".Build/Web",
             "extension-key": "sk_newsletterhelper"
-        },
+        }
     }
 }

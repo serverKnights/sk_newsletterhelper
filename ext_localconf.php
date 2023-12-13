@@ -36,3 +36,18 @@ $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO
        }'
     );
 })();
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
+// Extension Key
+    'sk_newsletterhelper',
+    // Service type
+    'verify',
+    // Service key
+    'tx_verifynpm',
+    array(
+        'title' => 'Verify Npm',
+        'subtype' => '',
+        'priority' => 60,
+        'className' => \ServerKnights\SkNewsletterhelper\Service\VerifyNpmService::class
+    )
+);
