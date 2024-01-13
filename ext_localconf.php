@@ -1,8 +1,5 @@
 <?php
 defined('TYPO3') || die();
-$GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], [
-    'NEWSLETTERCORE' => \ServerKnights\SkNewsletterhelper\ContentObject\NewsletterCoreContentObject::class
-]);
 (static function() {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'SkNewsletterhelper',
@@ -48,6 +45,6 @@ $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO
         'title' => 'Verify Npm',
         'subtype' => '',
         'priority' => 60,
-        'className' => \ServerKnights\SkNewsletterhelper\Service\VerifyNpmService::class
+        'className' => \ServerKnights\SkNewsletterhelper\Service\VerifyService::class
     )
 );

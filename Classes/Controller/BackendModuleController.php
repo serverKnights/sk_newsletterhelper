@@ -3,8 +3,9 @@
 namespace ServerKnights\SkNewsletterhelper\Controller;
 
 
+use mysql_xdevapi\Exception;
 use Psr\Http\Message\ResponseInterface;
-use ServerKnights\SkNewsletterhelper\Service\VerifyNpmService;
+use ServerKnights\SkNewsletterhelper\Service\VerifyService;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -16,27 +17,28 @@ class BackendModuleController extends ActionController
 
     protected ModuleTemplateFactory $moduleTemplateFactory;
     protected PageRenderer $pageRenderer;
-    protected VerifyNpmService $verifyNpmService;
+    protected VerifyService $verifyService;
 
-    public function __construct(PageRenderer $pageRenderer,ModuleTemplateFactory $moduleTemplateFactory,VerifyNpmService $verifyNpmService) {
+    public function __construct(PageRenderer $pageRenderer, ModuleTemplateFactory $moduleTemplateFactory, VerifyService $verifyService) {
         $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->pageRenderer = $pageRenderer;
-        $this->verifyNpmService = $verifyNpmService;
+        $this->verifyService = $verifyService;
 
     }
 
     public function showStartButtonsAction(): ResponseInterface
     {
+        $parsedBody = $this->request->getParsedBody();
 
-        if($this->request->hasArgument('isNpmPresent')){
-            $isNpmPresent = $this->request->getArgument('isNpmPresent');
+        if(isset($parsedBody["checkNPM"])){
+            $isNpmPresent = $this->verifyService->checkNpm();
+
             if(!empty($isNpmPresent) && $this->isValidPath($isNpmPresent)){
                 $this->view->assign('isNpmPresent', true);
                 $this->view->assign('npmPath', $isNpmPresent);
             }else{
                 $this->view->assign('isNpmPresent', false);
             }
-
         }
 
 
@@ -44,15 +46,8 @@ class BackendModuleController extends ActionController
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         // Render the content
         $moduleTemplate->setContent($this->view->render());
-        $this->view->assign('url', 'Hallo Welt');
         return $this->htmlResponse($moduleTemplate->renderContent());
 
-    }
-
-    public function verifyNPMAction(){
-        $isNpmPresent = $this->verifyNpmService->checkNpm();
-
-        $this->redirect('showStartButtons',null,null,['isNpmPresent' => $isNpmPresent]);
     }
 
     private function isValidPath($path) {

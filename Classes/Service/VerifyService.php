@@ -2,7 +2,7 @@
 
 namespace ServerKnights\SkNewsletterhelper\Service;
 
-class VerifyNpmService
+class VerifyService
 {
 
     public function init()

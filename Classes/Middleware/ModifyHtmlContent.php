@@ -12,6 +12,7 @@ use ServerKnights\SkNewsletterhelper\Utility\Compiler;
 use ServerKnights\SkNewsletterhelper\Utility\Factory;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Stream;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 
 class ModifyHtmlContent implements MiddlewareInterface
@@ -27,7 +28,6 @@ class ModifyHtmlContent implements MiddlewareInterface
         $body = $response->getBody();
         $body->rewind();
         $content = $response->getBody()->getContents();
-
         $factory = new Factory();
         $compiler = new Compiler($factory);
         $name ="/var/www/html/" . md5($content);

@@ -8,9 +8,10 @@
 
 <f:section name="Content">
     <h1>Hallo Welt</h1>
-    <a href="{f:uri.action(action: 'verifyNPM', controller: 'BackendModule')}">
-        <button>Scan Npm Path</button>
-    </a>
+    <f:form method="POST">
+        <f:form.textfield name="checkNPM" value="true" type="hidden"></f:form.textfield>
+        <f:form.textfield type="submit" value="Scan Npm Path"></f:form.textfield>
+    </f:form>
 
     <f:if condition="{isNpmPresent}">
         <f:then>

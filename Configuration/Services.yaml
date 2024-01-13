@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  # Content Object for newsletter Plugins
+  ServerKnights\SkNewsletterhelper\ContentObject\NewsletterCoreContentObject:
+    tags:
+      - name: frontend.contentobject
+        identifier: 'NEWSLETTERCORE'
+
+  ServerKnights\SkNewsletterhelper\Controller\BackendModuleController:
+    public: true
+
+  ServerKnights\SkNewsletterhelper\Service\VerifyService:
+    public: true

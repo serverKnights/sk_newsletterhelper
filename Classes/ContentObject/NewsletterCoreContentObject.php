@@ -2,6 +2,7 @@
 
 namespace ServerKnights\SkNewsletterhelper\ContentObject;
 
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 
 class NewsletterCoreContentObject extends AbstractContentObject
