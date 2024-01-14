@@ -89,7 +89,6 @@ class VerifyService
         if (!file_exists(__DIR__."/mjmlFolderList.json")) {
             return "File not found: ".__DIR__."/mjmlFolderList.json";
         }
-
         // Read the file contents
         $jsonContent = file_get_contents(__DIR__."/mjmlFolderList.json");
 

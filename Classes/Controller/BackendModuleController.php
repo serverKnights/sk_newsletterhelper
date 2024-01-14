@@ -42,13 +42,25 @@ class BackendModuleController extends ActionController
         }
         if(isset($parsedBody["checkMJML"])){
             $isMjmlPresent = $this->verifyService->checkMjml();
-            DebuggerUtility::var_dump($isMjmlPresent);
+
             if(!empty($isMjmlPresent) && $this->isValidPath($isMjmlPresent)){
                 $this->view->assign('isMjmlPresent', true);
                 $this->view->assign('mjmlPath', $isMjmlPresent);
             }else{
                 $this->view->assign('isMjmlPresent', false);
             }
+        }
+
+        if(isset($parsedBody["installMJML"])){
+            $targetDirName = 'sk_newsletterhelper';
+            // Find the position of the target directory in the path
+            $pos = strpos(__DIR__, $targetDirName);
+            // Extract the path up to and including the target directory
+            $baseDir = substr(__DIR__, 0, $pos + strlen($targetDirName));
+            //$command = 'find . -name "mjml*"';
+            $command = 'cd '.$baseDir.'; composer install';
+            // Execute the command
+            shell_exec($command);
         }
 
 
