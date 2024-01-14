@@ -7,22 +7,59 @@
 <f:layout name="ModuleLayout" />
 
 <f:section name="Content">
-    <h1>Hallo Welt</h1>
-    <f:form method="POST">
-        <f:form.textfield name="checkNPM" value="true" type="hidden"></f:form.textfield>
-        <f:form.textfield type="submit" value="Scan Npm Path"></f:form.textfield>
-    </f:form>
+    <h1>Newsletter Helper</h1>
 
+
+    <f:if condition="{0:isNpmPresent} == {0: NULL}">
+        <f:then>
+            <f:form method="POST">
+                <f:form.textfield name="checkNPM" value="true" type="hidden"></f:form.textfield>
+                <f:form.textfield type="submit" value="Scan Npm Path"></f:form.textfield>
+            </f:form>
+        </f:then>
+    </f:if>
     <f:if condition="{isNpmPresent}">
         <f:then>
+            <input type="button" value="Scan Npm Path" disabled="true" />
             <p style="color: green">Npm found under {npmPath}</p>
         </f:then>
     </f:if>
-    <f:if condition="{isNpmPresent} === false">
+    <f:if condition="{isNpmPresent} === false ">
         <f:then>
             <p style="color: red">Please install npm on your system</p>
         </f:then>
     </f:if>
+
+
+
+    <f:if condition="{0:isMjmlPresent} == {0: NULL}">
+        <f:then>
+            <f:form method="POST">
+                <f:form.textfield name="checkMJML" value="true" type="hidden"></f:form.textfield>
+                <f:form.textfield type="submit" value="Scan MJML Path"></f:form.textfield>
+            </f:form>
+        </f:then>
+    </f:if>
+    <f:if condition="{isMjmlPresent}">
+        <f:then>
+            <input type="button" value="Scan Npm Path" disabled="true" />
+            <p style="color: green">MJml found under {mjmlPath}</p>
+        </f:then>
+    </f:if>
+    <f:if condition="{isMjmlPresent} === false ">
+        <f:then>
+            <p style="color: red">Please install mjml on your system or use the installation button</p>
+            <f:form method="POST">
+                <f:form.textfield name="installMJML" value="true" type="hidden"></f:form.textfield>
+                <f:form.textfield type="submit" value="Install MJML"></f:form.textfield>
+            </f:form>
+        </f:then>
+    </f:if>
+
+
+
 </f:section>
+
+
 
 </html>

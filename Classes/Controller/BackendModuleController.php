@@ -40,6 +40,16 @@ class BackendModuleController extends ActionController
                 $this->view->assign('isNpmPresent', false);
             }
         }
+        if(isset($parsedBody["checkMJML"])){
+            $isMjmlPresent = $this->verifyService->checkMjml();
+            DebuggerUtility::var_dump($isMjmlPresent);
+            if(!empty($isMjmlPresent) && $this->isValidPath($isMjmlPresent)){
+                $this->view->assign('isMjmlPresent', true);
+                $this->view->assign('mjmlPath', $isMjmlPresent);
+            }else{
+                $this->view->assign('isMjmlPresent', false);
+            }
+        }
 
 
         // Create the module template
