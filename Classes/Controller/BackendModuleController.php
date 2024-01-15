@@ -7,6 +7,7 @@ use mysql_xdevapi\Exception;
 use Psr\Http\Message\ResponseInterface;
 use ServerKnights\SkNewsletterhelper\Service\VerifyService;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
@@ -28,25 +29,35 @@ class BackendModuleController extends ActionController
 
     public function showStartButtonsAction(): ResponseInterface
     {
+        $extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class);
+
+        $extentionNodePath = $extensionConfiguration->get('sk_newsletterhelper', 'NodePath');
+        $extentionMjmlPath = $extensionConfiguration->get('sk_newsletterhelper', 'NodeModulesPath');
+
         $parsedBody = $this->request->getParsedBody();
 
-        if(isset($parsedBody["checkNPM"])){
-            $isNpmPresent = $this->verifyService->checkNpm();
+        if(isset($parsedBody["checkAndSetNode"])){
+            $nodePath = $this->verifyService->checkNode();
 
-            if(!empty($isNpmPresent) && $this->isValidPath($isNpmPresent)){
-                $this->view->assign('isNpmPresent', true);
-                $this->view->assign('npmPath', $isNpmPresent);
+            if(!empty($nodePath) && $this->isValidPath($nodePath)){
+                $this->view->assign('isNodePresent', true);
+                $this->view->assign('nodePath', $nodePath);
+                $extensionConfiguration->set('sk_newsletterhelper', ["NodePath" => $nodePath, "NodeModulesPath" => $extentionMjmlPath]);
             }else{
-                $this->view->assign('isNpmPresent', false);
+                $extensionConfiguration->set('sk_newsletterhelper', ["NodePath" => null, "NodeModulesPath" => $extentionMjmlPath]);
+                $this->view->assign('isNodePresent', false);
             }
         }
-        if(isset($parsedBody["checkMJML"])){
-            $isMjmlPresent = $this->verifyService->checkMjml();
 
-            if(!empty($isMjmlPresent) && $this->isValidPath($isMjmlPresent)){
+        if(isset($parsedBody["checkAndSetMjml"])){
+            $mjmlPath = $this->verifyService->checkMjml();
+
+            if(!empty($mjmlPath) && $this->isValidPath($mjmlPath)){
                 $this->view->assign('isMjmlPresent', true);
-                $this->view->assign('mjmlPath', $isMjmlPresent);
+                $this->view->assign('mjmlPath', $mjmlPath);
+                $extensionConfiguration->set('sk_newsletterhelper', ["NodePath" => $extentionNodePath, "NodeModulesPath" => $mjmlPath]);
             }else{
+                $extensionConfiguration->set('sk_newsletterhelper', ["NodePath" => $extentionNodePath, "NodeModulesPath" => null]);
                 $this->view->assign('isMjmlPresent', false);
             }
         }
@@ -60,16 +71,50 @@ class BackendModuleController extends ActionController
             //$command = 'find . -name "mjml*"';
             $command = 'cd '.$baseDir.'; composer install';
             // Execute the command
-            shell_exec($command);
+            exec($command, $output, $returnStatus);
+
+            $mjmlPath = $this->verifyService->checkMjml();
+
+            if(!empty($mjmlPath) && $this->isValidPath($mjmlPath)){
+                $this->view->assign('isMjmlPresent', true);
+                $this->view->assign('mjmlPath', $mjmlPath);
+                $extensionConfiguration->set('sk_newsletterhelper', ["NodePath" => $extentionNodePath, "NodeModulesPath" => $mjmlPath]);
+            }else{
+                $extensionConfiguration->set('sk_newsletterhelper', ["NodePath" => $extentionNodePath, "NodeModulesPath" => null]);
+                $this->view->assign('isMjmlPresent', false);
+            }
         }
 
+
+        if(!empty($extentionNodePath) && !empty($extentionMjmlPath)){
+            // Set the specific template file
+            $this->view->setTemplatePathAndFilename("EXT:sk_newsletterhelper/Resources/Private/Templates/BackendModule/MainScreen.html");
+        }else{
+
+
+
+
+
+
+
+
+
+        }
 
         // Create the module template
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         // Render the content
         $moduleTemplate->setContent($this->view->render());
         return $this->htmlResponse($moduleTemplate->renderContent());
+    }
 
+
+    public function mainScreenAction(): ResponseInterface{
+        // Create the module template
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        // Render the content
+        $moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     private function isValidPath($path) {

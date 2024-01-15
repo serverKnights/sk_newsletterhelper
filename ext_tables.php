@@ -11,7 +11,7 @@ defined('TYPO3') || die();
     'newsletterhelpermodule',
     'bottom',
     [
-        \ServerKnights\SkNewsletterhelper\Controller\BackendModuleController::class => 'showStartButtons, verifyNPM',
+        \ServerKnights\SkNewsletterhelper\Controller\BackendModuleController::class => 'showStartButtons',
     ],
     [
         'access' => 'admin',

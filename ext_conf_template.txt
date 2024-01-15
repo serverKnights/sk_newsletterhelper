@@ -1,0 +1,9 @@
+##############
+### PAGETS ###
+##############
+
+# cat=Executable; type=string; label=Node Executable Path
+NodePath =
+
+# cat=Executable; type=string; label=Path to node_modules Folder
+NodeModulesPath =

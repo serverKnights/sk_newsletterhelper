@@ -4,6 +4,7 @@ namespace ServerKnights\SkNewsletterhelper\Utility;
 
 use ServerKnights\SkNewsletterhelper\Interface\FactoryInterface;
 use ServerKnights\SkNewsletterhelper\Utility\MLFile;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 
 class Factory implements FactoryInterface
 {
@@ -12,7 +13,11 @@ class Factory implements FactoryInterface
      */
     public function createCompiler(): MLFile
     {
-        $mjml_path = dirname(__DIR__) . '/../node_modules/.bin/mjml';
+        $node_modules = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('sk_newsletterhelper', 'NodeModulesPath');
+
+        // Remove trailing slash if it exists
+        $node_modules = rtrim($node_modules, '/');
+        $mjml_path =  $node_modules.'/.bin/mjml';
         return new MLFile($mjml_path);
     }
 
@@ -21,6 +26,6 @@ class Factory implements FactoryInterface
      */
     public function createNodeExe(): MLFile
     {
-        return new MLFile('/usr/bin/node');
+        return new MLFile(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('sk_newsletterhelper', 'NodePath'));
     }
 }

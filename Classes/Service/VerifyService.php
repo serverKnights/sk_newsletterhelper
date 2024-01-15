@@ -18,8 +18,8 @@ class VerifyService
     }
 
 
-    public function checkNpm(){
-        $command = (PHP_OS_FAMILY === 'Windows') ? 'where npm' : 'which npm';
+    public function checkNode(){
+        $command = (PHP_OS_FAMILY === 'Windows') ? 'where node' : 'which node';
 
         // Execute the command
         $output = shell_exec($command);
