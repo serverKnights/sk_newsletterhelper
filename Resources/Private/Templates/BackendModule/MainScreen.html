@@ -13,16 +13,16 @@
     <div class="sk-start-button-wrapper" style="display: flex; gap: 10px;">
         <f:form method="POST">
             <f:form.textfield name="checkAndSetNode" value="true" type="hidden"></f:form.textfield>
-            <f:form.textfield type="submit" value="Scan and set Node path"></f:form.textfield>
+            <f:form.textfield type="submit" value="Scan and set Node path again"></f:form.textfield>
         </f:form>
         <f:if condition="{isNodePresent}">
             <f:then>
-                <p style="color: green">Npm path set to {npmPath}</p>
+                <p style="color: green">Node path set to {nodePath}</p>
             </f:then>
         </f:if>
         <f:if condition="{isNodePresent} === false ">
             <f:then>
-                <p style="color: red">Please install Node and npm on your system and reload the settings page</p>
+                <p style="color: red">Please install Node on your system and reload the settings page</p>
             </f:then>
         </f:if>
 

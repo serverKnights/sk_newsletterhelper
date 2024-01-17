@@ -13,5 +13,5 @@ services:
   ServerKnights\SkNewsletterhelper\Controller\BackendModuleController:
     public: true
 
-  ServerKnights\SkNewsletterhelper\Service\VerifyService:
+  ServerKnights\SkNewsletterhelper\Service\ExtentionConfigurationService:
     public: true

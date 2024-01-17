@@ -2,13 +2,18 @@
 
 namespace ServerKnights\SkNewsletterhelper\Service;
 
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 
-class VerifyService
+class ExtentionConfigurationService
 {
-
+    private ExtensionConfiguration $extensionConfiguration;
+    private String $extentionNodePath;
+    private String $extentionMjmlPath;
     public function init()
     {
+        $this->extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class);
+        $this->extentionNodePath = $this->extensionConfiguration->get('sk_newsletterhelper', 'NodePath');
+        $this->extentionMjmlPath = $this->extensionConfiguration->get('sk_newsletterhelper', 'NodeModulesPath');
     }
     public function reset()
     {
@@ -18,7 +23,7 @@ class VerifyService
     }
 
 
-    public function checkNode(){
+    private function checkNode(){
         $command = (PHP_OS_FAMILY === 'Windows') ? 'where node' : 'which node';
 
         // Execute the command
@@ -50,6 +55,75 @@ class VerifyService
     }
 
 
+    private function setPath($nodePath,$mjmlPath){
+        $this->extensionConfiguration->set('sk_newsletterhelper', ["NodePath" => $nodePath, "NodeModulesPath" => $mjmlPath]);
+    }
+
+    public function checkAndSetNode(){
+        $assignArray = ['isNodePresent' => false];
+        $nodePath = $this->verifyService->checkNode();
+
+        if($this->isValidPath($nodePath)){
+            //set the value to the settings
+            $this->setPath($nodePath,$this->extentionMjmlPath);
+            $assignArray['isNodePresent'] = true;
+            $assignArray['nodePath'] = $nodePath;
+        }else{
+            //set the settings to null if not installed
+            $this->setPath(null,$this->extentionMjmlPath);
+        }
+        return $assignArray;
+    }
+
+    public function checkAndSetMjml(){
+        $assignArray = ['isMjmlPresent' => false];
+        $mjmlPath = $this->verifyService->checkMjml();
+
+        if($this->isValidPath($mjmlPath)){
+            //set the value to the settings
+            $this->setPath($this->extentionNodePath,$mjmlPath);
+            $assignArray['isMjmlPresent'] = true;
+            $assignArray['mjmlPath'] = $mjmlPath;
+        }else{
+            //set the settings to null if not installed
+            $this->setPath($this->extentionNodePath,null);
+        }
+        return $assignArray;
+    }
+    public function installMjml(){
+        $targetDirName = 'sk_newsletterhelper';
+        // Find the position of the target directory in the path
+        $pos = strpos(__DIR__, $targetDirName);
+        // Extract the path up to and including the target directory
+        $baseDir = substr(__DIR__, 0, $pos + strlen($targetDirName));
+        //$command = 'find . -name "mjml*"';
+        $command = 'cd '.$baseDir.'; composer install';
+        // Execute the command
+        exec($command, $output, $returnStatus);
+
+        return $this->checkAndSetMjml();
+    }
+
+    public function checkIfExtentionSettingsAreFilled(){
+         return !empty($extentionNodePath) && !empty($extentionMjmlPath);
+     }
+
+
+
+    private function isValidPath($path) {
+        // Check if the path exists
+        if (file_exists($path)) {
+            // Check if it's a directory or file
+            if (is_dir($path) || is_file($path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    //Depricated
     private function checkMjmlFoldernames($string){
         // Split the string by spaces
         $names = $this->loadMjmlFoldernames();
@@ -84,7 +158,7 @@ class VerifyService
         }
     }
 
-    function loadMjmlFoldernames() {
+    private function loadMjmlFoldernames() {
         // Check if the file exists
         if (!file_exists(__DIR__."/mjmlFolderList.json")) {
             return "File not found: ".__DIR__."/mjmlFolderList.json";
@@ -125,5 +199,7 @@ class VerifyService
         echo "JSON written to names.json\n";
 
     }
+
+
 
 }
