@@ -24,7 +24,7 @@ class BackendModuleController extends ActionController
         $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->pageRenderer = $pageRenderer;
         $this->extentionConfigurationService = $extentionConfigurationService;
-
+        $this->extentionConfigurationService->init();
     }
 
     public function showStartButtonsAction(): ResponseInterface

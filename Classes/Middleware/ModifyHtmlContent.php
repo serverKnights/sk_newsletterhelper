@@ -28,12 +28,34 @@ class ModifyHtmlContent implements MiddlewareInterface
         $body = $response->getBody();
         $body->rewind();
         $content = $response->getBody()->getContents();
-        $factory = new Factory();
-        $compiler = new Compiler($factory);
-        $name ="/var/www/html/" . md5($content);
-        $compiler->compile($content, $name);
 
-        $html = file_get_contents($name);
+        $startTag = '<mjml>';
+        $endTag = '</mjml>';
+
+        $startPos = strpos($content, $startTag);
+        if ($startPos !== false) {
+            $endPos = strpos($content, $endTag, $startPos);
+            if ($endPos !== false) {
+                // Add the length of the end tag to include it in the final substring
+                $endPos += strlen($endTag);
+                // Extract the substring between the start and end tags
+                $content = substr($content, $startPos, $endPos - $startPos);
+
+                $factory = new Factory();
+                $compiler = new Compiler($factory);
+                $name ="/var/www/html/" . md5($content);
+
+                $compiler->compile($content, $name);
+
+                $html = file_get_contents($name);
+            } else {
+                $html = $content;
+            }
+        } else {
+            $html = $content;
+        }
+
+
         $body = new Stream('php://temp', 'rw');
         $body->write($html);
         return $response->withBody($body);

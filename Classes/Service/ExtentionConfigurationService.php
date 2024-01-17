@@ -40,17 +40,40 @@ class ExtentionConfigurationService
     }
 
     public function checkMjml(){
-        //$command = 'find . -name "mjml*"';
-        $command = 'cd /; find . -name "*mjml*"';
-        // Execute the command
-        $output = shell_exec($command);
-
-        $result = $this->checkMjmlFoldernames($output);
-
-        if($result == false){
-            return false;
+        if(PHP_OS_FAMILY === 'Windows'){
+            // TODO test on windows server
+            $command = 'powershell "Get-ChildItem -Path C:\\ -Recurse -Filter *mjml* -ErrorAction SilentlyContinue | % { $_.FullName }"';
         }else{
-            return $result;
+            //$command = 'find . -name "*mjml*"';
+            $command = 'ls -R / 2>/dev/null | grep "mjml"';
+        }
+
+        // Execute the command
+        $output = exec($command);
+        $paths = explode((PHP_OS_FAMILY === 'Windows') ? "\r\n" : "\n", $output);
+        $pathToNodeModules = [];
+
+        // Extract the name up to "node_modules/" in each path and store unique paths
+        foreach ($paths as $path) {
+            // Find the position of 'node_modules' in the path
+            $nodeModulesPos = strpos($path, 'node_modules');
+            if ($nodeModulesPos !== false) {
+                // Extract the substring from start to 'node_modules'
+                // Store the path in the set (associative array)
+                $pathToNodeModules[substr($path, 0, $nodeModulesPos + strlen('node_modules'))] = true;
+            }
+        }
+
+        // Convert the keys of the associative array to a numeric array
+        $pathToNodeModules = array_keys($pathToNodeModules);
+
+        if(empty($pathToNodeModules)){
+            return false;
+        }else if(count($pathToNodeModules) > 1){
+            //TODO make user choose witch path
+            return $pathToNodeModules[0];
+        }else{
+            return $pathToNodeModules[0];
         }
     }
 
@@ -61,7 +84,7 @@ class ExtentionConfigurationService
 
     public function checkAndSetNode(){
         $assignArray = ['isNodePresent' => false];
-        $nodePath = $this->verifyService->checkNode();
+        $nodePath = $this->checkNode();
 
         if($this->isValidPath($nodePath)){
             //set the value to the settings
@@ -77,7 +100,7 @@ class ExtentionConfigurationService
 
     public function checkAndSetMjml(){
         $assignArray = ['isMjmlPresent' => false];
-        $mjmlPath = $this->verifyService->checkMjml();
+        $mjmlPath = $this->checkMjml();
 
         if($this->isValidPath($mjmlPath)){
             //set the value to the settings
@@ -105,7 +128,7 @@ class ExtentionConfigurationService
     }
 
     public function checkIfExtentionSettingsAreFilled(){
-         return !empty($extentionNodePath) && !empty($extentionMjmlPath);
+         return !empty($this->extentionNodePath) && !empty($this->extentionMjmlPath);
      }
 
 
