@@ -38,14 +38,9 @@
         </f:if>
         <f:if condition="{isMjmlPresent} === false ">
             <f:then>
-                <p style="color: red">Please install mjml on your system or use the installation button</p>
-                <f:form method="POST">
-                    <f:form.textfield name="installMJML" value="true" type="hidden"></f:form.textfield>
-                    <f:form.textfield type="submit" value="Install MJML"></f:form.textfield>
-                </f:form>
+                <p style="color: red">Please install mjml on your system or use the installation button when reloading the extention and check again</p>
             </f:then>
         </f:if>
-
     </div>
 </f:section>
 

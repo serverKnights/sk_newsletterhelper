@@ -12,8 +12,9 @@ use ServerKnights\SkNewsletterhelper\Utility\Compiler;
 use ServerKnights\SkNewsletterhelper\Utility\Factory;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Stream;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-
+use ServerKnights\SkNewsletterhelper\Service\ExtentionConfigurationService;
 
 class ModifyHtmlContent implements MiddlewareInterface
 {
@@ -31,9 +32,10 @@ class ModifyHtmlContent implements MiddlewareInterface
 
         $startTag = '<mjml>';
         $endTag = '</mjml>';
-
+        $extention = GeneralUtility::makeInstance(ExtentionConfigurationService::class);
+        $extention->init();
         $startPos = strpos($content, $startTag);
-        if ($startPos !== false) {
+        if ($startPos !== false && $extention->checkIfExtentionSettingsAreFilled()) {
             $endPos = strpos($content, $endTag, $startPos);
             if ($endPos !== false) {
                 // Add the length of the end tag to include it in the final substring

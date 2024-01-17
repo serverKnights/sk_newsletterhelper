@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;;
 use ServerKnights\SkNewsletterhelper\Service\ExtentionConfigurationService;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
@@ -17,9 +18,8 @@ class BackendModuleController extends ActionController
 {
 
     protected ModuleTemplateFactory $moduleTemplateFactory;
-    protected PageRenderer $pageRenderer;
+    protected readonly PageRenderer $pageRenderer;
     protected ExtentionConfigurationService $extentionConfigurationService;
-
     public function __construct(PageRenderer $pageRenderer, ModuleTemplateFactory $moduleTemplateFactory, ExtentionConfigurationService $extentionConfigurationService) {
         $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->pageRenderer = $pageRenderer;
@@ -34,6 +34,11 @@ class BackendModuleController extends ActionController
 
         if($this->extentionConfigurationService->checkIfExtentionSettingsAreFilled()){ // Set the specific template file
             $this->view->setTemplatePathAndFilename("EXT:sk_newsletterhelper/Resources/Private/Templates/BackendModule/MainScreen.html");
+        }else{
+            // Load JavaScript via JavaScriptRenderer
+            $this->pageRenderer->getJavaScriptRenderer()->addJavaScriptModuleInstruction(
+                JavaScriptModuleInstruction::create('@serverKnights/sk-newsletterhelper/loadIcon.js')
+            );
         }
 
         if(isset($parsedBody["checkAndSetNode"])){
