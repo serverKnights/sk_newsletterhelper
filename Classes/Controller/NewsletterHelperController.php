@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace ServerKnights\SkNewsletterhelper\Controller;
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+
 /**
  * This file is part of the "New" Extension for TYPO3 CMS.
  *
@@ -42,8 +46,9 @@ class NewsletterHelperController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
      */
     public function listAction(): \Psr\Http\Message\ResponseInterface
     {
-        $newsletterHelpers = $this->newsletterHelperRepository->findAll();
-        $this->view->assign('newsletterHelpers', $newsletterHelpers);
+        //$this->view->setLayoutPathAndFilename('EXT:cf_cookiemanager_uikit/Resources/Private/Layouts/TestLayout.html');
+        //$this->view->setLayoutPathAndFilename('EXT:sk_newsletterhelper/Resources/Private/Layouts/Newsletter.html');
+
         return $this->htmlResponse();
     }
 }

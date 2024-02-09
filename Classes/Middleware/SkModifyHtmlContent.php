@@ -16,9 +16,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use ServerKnights\SkNewsletterhelper\Service\ExtentionConfigurationService;
 
-class ModifyHtmlContent implements MiddlewareInterface
+class SkModifyHtmlContent implements MiddlewareInterface
 {
-
+    private $debug = false;
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $handler->handle($request);
@@ -30,6 +30,10 @@ class ModifyHtmlContent implements MiddlewareInterface
         $body->rewind();
         $content = $response->getBody()->getContents();
 
+
+        //DebuggerUtility::var_dump($response->getBody()->getContents());
+        //die();
+
         $startTag = '<mjml>';
         $endTag = '</mjml>';
         $extention = GeneralUtility::makeInstance(ExtentionConfigurationService::class);
@@ -38,18 +42,38 @@ class ModifyHtmlContent implements MiddlewareInterface
         if ($startPos !== false && $extention->checkIfExtentionSettingsAreFilled()) {
             $endPos = strpos($content, $endTag, $startPos);
             if ($endPos !== false) {
+
+                $scriptRegexPattern = '/<script[^>]*?(?:\/>|>[^<]*?<\/script>)/im';
+                $mjmlTextRegexPattern = '/<mj-text[^>]*?(?:\/>|>[^<]*?<\/mj-text>)/im';
+                preg_match_all($scriptRegexPattern, $content, $scriptMatches);
+                preg_match_all($mjmlTextRegexPattern, $content, $mjmlMatches);
+
                 // Add the length of the end tag to include it in the final substring
                 $endPos += strlen($endTag);
                 // Extract the substring between the start and end tags
                 $content = substr($content, $startPos, $endPos - $startPos);
 
+                if((!empty($scriptMatches[0]) && !empty($request->getQueryParams()["isBackend"])) || $this->debug){
+                    if (!empty($mjmlMatches[0])) {
+                        foreach ($mjmlMatches[0] as $match) {
+                            $content = str_replace($match, $this->addHtmlAttribute_in_HTML_Tag($match,"mj-text","css-class","sk-text"), $content);
+                        }
+                    }
+                }
                 $factory = new Factory();
                 $compiler = new Compiler($factory);
                 $name ="/var/www/html/" . md5($content);
-
                 $compiler->compile($content, $name);
 
                 $html = file_get_contents($name);
+
+                //if backendContext add the script tags to the head
+                if((!empty($scriptMatches[0]) && !empty($request->getQueryParams()["isBackend"])) || $this->debug){
+                    foreach ($scriptMatches[0] as $match) {
+                        $html = str_replace("</head>", $match."</head>", $html);
+                    }
+                    $html = str_replace("</html>", "<div style='display:none;' id='sk-mjml-template'>".$content."</div></html>", $html);
+                }
             } else {
                 $html = $content;
             }
@@ -62,6 +86,18 @@ class ModifyHtmlContent implements MiddlewareInterface
         $body->write($html);
         return $response->withBody($body);
     }
+    public function addHtmlAttribute_in_HTML_Tag($htmlStr, $tagname, $attributeName, $attributeValue): string
+    {
+        /** if html tag attribute does not exist then add it ... */
+        if (!preg_match("~<$tagname\s.*?$attributeName=([\'\"])~i", $htmlStr)) {
+            $htmlStr = preg_replace('/(<' . $tagname . '\b[^><]*)>/i', '$1 ' . $attributeName . '="' . $attributeValue . '">', $htmlStr, 1);
+        } else {
+            // If the attribute already exists, replace its value
+            $htmlStr = preg_replace("~(<$tagname\s.*?$attributeName=)([\'\"])(.*?)([\'\"])~i", '$1$2' . $attributeValue . '$4', $htmlStr,1);
+        }
+        return $htmlStr;
+    }
+
 
 
 }

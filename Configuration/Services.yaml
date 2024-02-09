@@ -4,6 +4,9 @@ services:
     autoconfigure: true
     public: false
 
+  ServerKnights\SkNewsletterhelper\:
+    resource: '../Classes/*'
+
   # Content Object for newsletter Plugins
   ServerKnights\SkNewsletterhelper\ContentObject\NewsletterCoreContentObject:
     tags:
@@ -15,3 +18,7 @@ services:
 
   ServerKnights\SkNewsletterhelper\Service\ExtentionConfigurationService:
     public: true
+
+  ServerKnights\SkNewsletterhelper\Controller\NewsletterHelperController:
+    public: true
+    tags: [ 'frontend.controller' ]

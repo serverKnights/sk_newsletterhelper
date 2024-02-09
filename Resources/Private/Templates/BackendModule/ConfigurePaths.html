@@ -1,0 +1,50 @@
+
+<html
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+        xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+        data-namespace-typo3-fluid="true">
+
+<f:layout name="ModuleLayout" />
+
+<f:section name="Content">
+    <h1>Newsletter Helper</h1>
+    <h3>Settings complete</h3>
+
+    <div class="sk-start-button-wrapper" style="display: flex; gap: 10px;">
+        <f:form method="POST">
+            <f:form.textfield name="checkAndSetNode" value="true" type="hidden"></f:form.textfield>
+            <f:form.textfield type="submit" value="Scan and set Node path again"></f:form.textfield>
+        </f:form>
+        <f:if condition="{isNodePresent}">
+            <f:then>
+                <p style="color: green">Node path set to {nodePath}</p>
+            </f:then>
+        </f:if>
+        <f:if condition="{isNodePresent} === false ">
+            <f:then>
+                <p style="color: red">Please install Node on your system and reload the settings page</p>
+            </f:then>
+        </f:if>
+
+        <f:form method="POST">
+            <f:form.textfield name="checkAndSetMjml" value="true" type="hidden"></f:form.textfield>
+            <f:form.textfield type="submit" value="Scan and set MJML again"></f:form.textfield>
+        </f:form>
+
+        <f:if condition="{isMjmlPresent}">
+            <f:then>
+                <p style="color: green">MJml path set to {mjmlPath}</p>
+            </f:then>
+        </f:if>
+        <f:if condition="{isMjmlPresent} === false ">
+            <f:then>
+                <p style="color: red">Please install mjml on your system or use the installation button when reloading the extention and check again</p>
+            </f:then>
+        </f:if>
+    </div>
+</f:section>
+
+
+
+</html>

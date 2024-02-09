@@ -1,25 +1,19 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-<f:layout name="Default" />
 
+<f:layout name="Newsletter"/>
 
 <f:section name="content">
-    <h1>Listing for NewsletterHelper</h1>
+    <mjml>
+        <mj-body>
+            <mj-section>
+                <mj-column>
 
-    <f:flashMessages />
-
-    <table class="tx_sknewsletterhelper">
-        <tr>
-            <th></th>
-            <th></th>
-        </tr>
-        <f:for each="{newsletterHelpers}" as="newsletterHelper">
-            <tr>
-                <td><f:link.action action="edit" arguments="{newsletterHelper : newsletterHelper}">Edit</f:link.action></td>
-                <td><f:link.action action="delete" arguments="{newsletterHelper : newsletterHelper}">Delete</f:link.action></td>
-            </tr>
-        </f:for>
-    </table>
-
-    <f:link.action action="new">New NewsletterHelper</f:link.action>
+                    <mj-image width="100px" src="https://mjml.io/assets/img/logo-small.png"></mj-image>
+                    <mj-divider border-color="#F45E43"></mj-divider>
+                    <mj-text font-size="20px" color="#F45E43" font-family="helvetica">Hello World original</mj-text>
+                </mj-column>
+            </mj-section>
+        </mj-body>
+    </mjml>
 </f:section>
 </html>

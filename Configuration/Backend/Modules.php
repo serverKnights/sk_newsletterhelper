@@ -11,15 +11,17 @@ return [
     'newsletterhelper' => [
         'parent' => 'web',
         'position' => 'bottom',
-        'access' => 'admin',
-        'navigationComponentId' => '',
-        'inheritNavigationComponentFromMainModule' => false,
+        'access' => 'user',
+        'navigationComponentId' => 'web',
         'labels' => ['title' => 'Newsletter Helper'],
         'extensionName' => 'sk_newsletterhelper',
         'controllerActions' => [
             BackendModuleController::class => [
                 'showStartButtons',
             ],
+        ],
+        'moduleData' => [
+            'language' => 0,
         ],
     ],
 ];
