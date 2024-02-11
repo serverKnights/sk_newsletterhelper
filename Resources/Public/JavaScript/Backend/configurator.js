@@ -1,22 +1,39 @@
-
 document.addEventListener("DOMContentLoaded", function() {
-  //  var element = document.getElementsByClassName("sk-first-text");
-  //  console.log(element);
+    var configInput = document.getElementById("sk_newsletterhelper_configurator_base64");
+    var config =  JSON.parse(atob(configInput.value));
 
-
-    var elements = document.getElementsByClassName("sk-text");
-
-    for (var i = 0; i < elements.length; i++) {
-        var id = "sk-text-" + (i + 1);
-        console.log(elements[i].children);
-        elements[i].children[0].setAttribute("id", id);
-
-        InlineEditor
-            .create( document.querySelector( "#"+id ) )
-            .catch( error => {
-                console.error( error );
-            } );
-    }
-
-
+    Object.keys(config).forEach(function(key) {
+        if(config[key].method === "save") {
+           initSave(config[key]);
+        }
+    });
 });
+
+
+async function initSave(element) {
+    await fetch(element.url).then(function(response) {
+        return response.text();
+    }).then(function(string) {
+
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(string, 'text/html');
+        var saveHtml = doc.body.firstChild;
+        document.body.append(saveHtml);
+
+        var saveButton = document.getElementsByClassName("sk-save");
+
+        saveButton[0].addEventListener("click", function() {
+            var templateContent = document.getElementById('sk-mjml-template').innerHTML;
+            fetch(element.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/html'
+                },
+                body: templateContent
+            }).then(function(response) {
+                return response.text();
+            });
+        });
+
+    });
+}

@@ -1,0 +1,24 @@
+<html
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+        xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+        data-namespace-typo3-fluid="true">
+
+<f:layout name="ModuleLayout"/>
+
+<f:section name="Content">
+
+    <f:for each="{templates}" as="template">
+
+        <f:form method="POST">
+            <f:form.textfield type="text" name="templatePath" value="{template}" />
+            <f:form.submit value="Template1" />
+        </f:form>
+
+    </f:for>
+
+</f:section>
+<f:comment>TODO render more beatiful and specific name with little cover image</f:comment>
+
+
+</html>

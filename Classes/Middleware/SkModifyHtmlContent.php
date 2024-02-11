@@ -44,7 +44,9 @@ class SkModifyHtmlContent implements MiddlewareInterface
             if ($endPos !== false) {
 
                 $scriptRegexPattern = '/<script[^>]*?(?:\/>|>[^<]*?<\/script>)/im';
-                $mjmlTextRegexPattern = '/<mj-text[^>]*?(?:\/>|>[^<]*?<\/mj-text>)/im';
+                $mjmlTextRegexPattern = '/<mj-text[^>]*?>([\s\S]*?)<\/mj-text>/im';
+                $configuratorBaseRegexPattern = '/<input type="hidden" id="sk_newsletterhelper_configurator_base64" value=".*?\/>/s';
+                preg_match($configuratorBaseRegexPattern, $content, $configuratorMatch);
                 preg_match_all($scriptRegexPattern, $content, $scriptMatches);
                 preg_match_all($mjmlTextRegexPattern, $content, $mjmlMatches);
 
@@ -55,8 +57,11 @@ class SkModifyHtmlContent implements MiddlewareInterface
 
                 if((!empty($scriptMatches[0]) && !empty($request->getQueryParams()["isBackend"])) || $this->debug){
                     if (!empty($mjmlMatches[0])) {
+
+                        $count = 1;//use the count to identify the right text
                         foreach ($mjmlMatches[0] as $match) {
-                            $content = str_replace($match, $this->addHtmlAttribute_in_HTML_Tag($match,"mj-text","css-class","sk-text"), $content);
+                            $content = str_replace($match, $this->addHtmlAttribute_in_HTML_Tag($match,"mj-text","css-class","sk-text sk-text-".$count), $content);
+                            $count++;
                         }
                     }
                 }
@@ -71,6 +76,9 @@ class SkModifyHtmlContent implements MiddlewareInterface
                 if((!empty($scriptMatches[0]) && !empty($request->getQueryParams()["isBackend"])) || $this->debug){
                     foreach ($scriptMatches[0] as $match) {
                         $html = str_replace("</head>", $match."</head>", $html);
+                    }
+                    if (!empty($configuratorMatch[0])) {
+                        $html = str_replace("</body>", $configuratorMatch[0]."</body>", $html);
                     }
                     $html = str_replace("</html>", "<div style='display:none;' id='sk-mjml-template'>".$content."</div></html>", $html);
                 }

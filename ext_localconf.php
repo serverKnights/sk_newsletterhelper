@@ -5,11 +5,11 @@ defined('TYPO3') || die();
         'SkNewsletterhelper',
         'Newsletterhelper',
         [
-            \ServerKnights\SkNewsletterhelper\Controller\NewsletterHelperController::class => 'list'
+            \ServerKnights\SkNewsletterhelper\Controller\NewsletterHelperController::class => 'list,save'
         ],
         // non-cacheable actions
         [
-            \ServerKnights\SkNewsletterhelper\Controller\NewsletterHelperController::class => ''
+            \ServerKnights\SkNewsletterhelper\Controller\NewsletterHelperController::class => 'save'
         ]
     );
 
@@ -33,18 +33,3 @@ defined('TYPO3') || die();
        }'
     );
 })();
-
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
-// Extension Key
-    'sk_newsletterhelper',
-    // Service type
-    'verify',
-    // Service key
-    'tx_verifynpm',
-    array(
-        'title' => 'Verify Npm',
-        'subtype' => '',
-        'priority' => 60,
-        'className' => \ServerKnights\SkNewsletterhelper\Service\VerifyService::class
-    )
-);

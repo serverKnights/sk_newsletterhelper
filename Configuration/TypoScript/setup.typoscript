@@ -20,6 +20,34 @@ plugin.tx_sknewsletterhelper_newsletterhelper {
         #callDefaultActionIfActionCantBeResolved = 1
     }
 }
+ajax_sknewsletterhelper_pluginSave = PAGE
+ajax_sknewsletterhelper_pluginSave {
+    typeNum = 1707673083
+    config {
+        disableAllHeaderCode = 1
+        additionalHeaders.10.header = Content-type:text/html
+        no_cache = 1
+        contentObjectExceptionHandler = 0
+    }
+
+    99999999 = COA
+    99999999 {
+        10 = USER
+        10 {
+            userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+            extensionName = SkNewsletterhelper
+            pluginName = Newsletterhelper
+            vendorName = ServerKnights
+            controller = NewsletterHelper
+            switchableControllerActions {
+                NewsletterHelper {
+                    1 = save
+                }
+            }
+        }
+    }
+
+}
 
 page = PAGE
 page {
@@ -50,6 +78,8 @@ page {
     includeJS.editor.defer = 1
     includeJS.configurator = EXT:sk_newsletterhelper/Resources/Public/JavaScript/Backend/configurator.js
     includeJS.configurator.defer = 1
+    includeJS.mjtext = EXT:sk_newsletterhelper/Resources/Public/JavaScript/Backend/mj-text.js
+    includeJS.mjtext.defer = 1
 
    # 10 = NEWSLETTERCORE
    # 10 {

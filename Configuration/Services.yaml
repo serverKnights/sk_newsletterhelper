@@ -19,6 +19,9 @@ services:
   ServerKnights\SkNewsletterhelper\Service\ExtentionConfigurationService:
     public: true
 
+  ServerKnights\SkNewsletterhelper\Service\TemplatingService:
+    public: true
+
   ServerKnights\SkNewsletterhelper\Controller\NewsletterHelperController:
     public: true
     tags: [ 'frontend.controller' ]

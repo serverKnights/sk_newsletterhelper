@@ -1,19 +1,7 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+{namespace sk=ServerKnights\SkNewsletterhelper\ViewHelpers}
 
-<f:layout name="Newsletter"/>
+<f:layout name="Newsletter" />
 
 <f:section name="content">
-    <mjml>
-        <mj-body>
-            <mj-section>
-                <mj-column>
-
-                    <mj-image width="100px" src="https://mjml.io/assets/img/logo-small.png"></mj-image>
-                    <mj-divider border-color="#F45E43"></mj-divider>
-                    <mj-text font-size="20px" color="#F45E43" font-family="helvetica">Hello World original</mj-text>
-                </mj-column>
-            </mj-section>
-        </mj-body>
-    </mjml>
+    <sk:skTemplate pageId="{pageId}"></sk:skTemplate>
 </f:section>
-</html>

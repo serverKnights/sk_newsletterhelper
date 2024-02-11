@@ -46,9 +46,44 @@ class NewsletterHelperController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
      */
     public function listAction(): \Psr\Http\Message\ResponseInterface
     {
-        //$this->view->setLayoutPathAndFilename('EXT:cf_cookiemanager_uikit/Resources/Private/Layouts/TestLayout.html');
-        //$this->view->setLayoutPathAndFilename('EXT:sk_newsletterhelper/Resources/Private/Layouts/Newsletter.html');
+        // Get the Typo3 URI Builder
+        $this->uriBuilder->setCreateAbsoluteUri(true);
+        $this->uriBuilder->setTargetPageType(1707673083);
+        // Call the uriFor method to get a TrackingURL
+        $generatedSavingUrl = $this->uriBuilder->uriFor(
+            "save",
+            null, // Controller arguments, if any
+            "NewsletterHelper",
+            "SkNewsletterhelper",
+            "Newsletterhelper"
+        );
 
+
+        $configuratorTypes = [
+            "save" => [
+                "url" => $generatedSavingUrl,
+                "method" => "save"
+            ],
+        ];
+
+        $this->view->assignMultiple([
+            'configuratorTypes' => base64_encode(json_encode($configuratorTypes)),
+            'pageId' => $this->request->getAttribute('routing')->getPageId(),
+        ]);
+
+
+        return $this->htmlResponse();
+    }
+
+    public function saveAction(): \Psr\Http\Message\ResponseInterface
+    {
+        if($this->request->getMethod() === "POST"){
+            $templateService = GeneralUtility::makeInstance(\ServerKnights\SkNewsletterhelper\Service\TemplateService::class);
+            $pageArguments = $this->request->getAttribute('routing');
+            $pageId = $pageArguments->getPageId();
+            $content = $this->request->getBody()->getContents();
+            $result = $templateService->saveTemplate($pageId,$content);
+        }
         return $this->htmlResponse();
     }
 }

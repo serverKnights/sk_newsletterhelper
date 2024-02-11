@@ -4,6 +4,7 @@ namespace ServerKnights\SkNewsletterhelper\Controller;
 
 use Psr\Http\Message\ResponseInterface;;
 use ServerKnights\SkNewsletterhelper\Service\ExtentionConfigurationService;
+use ServerKnights\SkNewsletterhelper\Service\TemplateService;
 use TYPO3\CMS\Backend\Routing\PreviewUriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
@@ -11,6 +12,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Context\LanguageAspectFactory;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Imaging\Icon;
@@ -43,6 +45,7 @@ class BackendModuleController extends ActionController
     protected SiteFinder $siteFinder;
     protected PageRepository $pageRepository;
     protected IconFactory $iconFactory;
+    protected TemplateService $templateService;
     protected PolicyRegistry $policyRegistry;
     public function __construct(
         PageRenderer $pageRenderer,
@@ -51,7 +54,8 @@ class BackendModuleController extends ActionController
         SiteFinder $siteFinder,
         PageRepository $pageRepository,
         IconFactory $iconFactory,
-        PolicyRegistry $policyRegistry
+        PolicyRegistry $policyRegistry,
+        TemplateService $templateService
     ) {
         $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->pageRenderer = $pageRenderer;
@@ -61,6 +65,7 @@ class BackendModuleController extends ActionController
         $this->pageRepository = $pageRepository;
         $this->iconFactory = $iconFactory;
         $this->policyRegistry = $policyRegistry;
+        $this->templateService = $templateService;
     }
 
     public function showStartButtonsAction(): ResponseInterface
@@ -96,9 +101,33 @@ class BackendModuleController extends ActionController
         $moduleTemplate->setContent($this->view->render());
         return $this->htmlResponse($moduleTemplate->renderContent());
     }
+    public function createTemplateAction(): ResponseInterface{
 
+        $directoryPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("sk_newsletterhelper")."/Resources/Private/Basetemplates";
+        $htmlFiles = glob($directoryPath . '/*.html');
+
+        $this->view->assign('templates', $htmlFiles);
+        $this->view->assign('pageId', $this->request->getQueryParams()["id"]);
+        return $this->htmlResponse();
+    }
 
     public function mainScreenAction(): ResponseInterface{
+
+        $pageArguments = $this->request->getAttribute('routing');
+    //    $pageId = $pageArguments->getPageId();
+
+
+        if(!empty($this->request->getQueryParams()["id"])){
+            if(isset($this->request->getParsedBody()["templatePath"])){
+                $this->templateService->createTemplate($this->request->getQueryParams()["id"],$this->request->getParsedBody()["templatePath"]);
+            }
+            if(!$this->templateService->hasTemplate($this->request->getQueryParams()["id"])){
+                return new ForwardResponse('createTemplate');
+            }
+        }
+
+
+
         $languageService = $this->getLanguageService();
         $pageId = (int)($this->request->getQueryParams()['id'] ?? 0);
         $moduleData = $this->request->getAttribute('moduleData');
