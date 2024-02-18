@@ -5,7 +5,7 @@ defined('TYPO3') || die();
         'SkNewsletterhelper',
         'Newsletterhelper',
         [
-            \ServerKnights\SkNewsletterhelper\Controller\NewsletterHelperController::class => 'list,save'
+            \ServerKnights\SkNewsletterhelper\Controller\NewsletterHelperController::class => 'list,save,resetLayout'
         ],
         // non-cacheable actions
         [

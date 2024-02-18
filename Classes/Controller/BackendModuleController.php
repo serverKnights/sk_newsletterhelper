@@ -105,8 +105,22 @@ class BackendModuleController extends ActionController
 
         $directoryPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("sk_newsletterhelper")."/Resources/Private/Basetemplates";
         $htmlFiles = glob($directoryPath . '/*.html');
+        if($this->templateService->isCustomTemplateSet()){
+            $customDirectoryPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(trim($this->templateService->getCustomExtensionName())).$this->templateService->getCustomTemplatePath();
+            if(is_dir($customDirectoryPath)){
+                $customHtmlFiles = glob($customDirectoryPath . '/*.html');
+                $htmlFiles = array_merge($htmlFiles, $customHtmlFiles);
+            }
+        }
 
-        $this->view->assign('templates', $htmlFiles);
+        foreach ($htmlFiles as $filePath) {
+            $templates[] = [
+                'name' => basename($filePath), // Extracts the filename from the path
+                'path' => $filePath // Full path of the template file
+            ];
+        }
+
+        $this->view->assign('templates', $templates);
         $this->view->assign('pageId', $this->request->getQueryParams()["id"]);
         return $this->htmlResponse();
     }
@@ -118,8 +132,8 @@ class BackendModuleController extends ActionController
 
 
         if(!empty($this->request->getQueryParams()["id"])){
-            if(isset($this->request->getParsedBody()["templatePath"])){
-                $this->templateService->createTemplate($this->request->getQueryParams()["id"],$this->request->getParsedBody()["templatePath"]);
+            if(isset($this->request->getParsedBody()["template"]["path"])){
+                $this->templateService->createTemplate($this->request->getQueryParams()["id"],$this->request->getParsedBody()["template"]["path"]);
             }
             if(!$this->templateService->hasTemplate($this->request->getQueryParams()["id"])){
                 return new ForwardResponse('createTemplate');
@@ -350,20 +364,19 @@ class BackendModuleController extends ActionController
             ->setIcon($this->iconFactory->getIcon('actions-view-page', Icon::SIZE_SMALL));
         $buttonBar->addButton($showButton);
 
-        $refreshButton = $buttonBar->makeLinkButton()
-            ->setHref('#')
-            ->setClasses('t3js-viewpage-refresh')
-            ->setTitle($languageService->sL('LLL:EXT:viewpage/Resources/Private/Language/locallang.xlf:refreshPage'))
-            ->setIcon($this->iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL));
-        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT);
+        // Get the Typo3 URI Builder
+        $resetLayoutUrl = $this->uriBuilder->setTargetPageType(1708283669)
+            ->setArguments(['tx_sknewsletterhelper_newsletterhelper[action]' => 'resetLayout',
+                'tx_sknewsletterhelper_newsletterhelper[controller]' => 'NewsletterHelper'])
+            ->buildFrontendUri();
 
         // Shortcut
         $saveButton = $buttonBar->makeLinkButton()
-            ->setHref('#')
+            ->setHref($resetLayoutUrl)
             ->setClasses('sk-newsletterhelper-save-button')
-            ->setTitle("Save")
+            ->setTitle("Change Layout")
             ->setShowLabelText(true)
-            ->setIcon($this->iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
+            ->setIcon($this->iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL));
         $buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_RIGHT);
     }
 

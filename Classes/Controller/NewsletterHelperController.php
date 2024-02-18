@@ -49,7 +49,6 @@ class NewsletterHelperController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
         // Get the Typo3 URI Builder
         $this->uriBuilder->setCreateAbsoluteUri(true);
         $this->uriBuilder->setTargetPageType(1707673083);
-        // Call the uriFor method to get a TrackingURL
         $generatedSavingUrl = $this->uriBuilder->uriFor(
             "save",
             null, // Controller arguments, if any
@@ -84,6 +83,15 @@ class NewsletterHelperController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
             $content = $this->request->getBody()->getContents();
             $result = $templateService->saveTemplate($pageId,$content);
         }
+        return $this->htmlResponse();
+    }
+
+    public function resetLayoutAction(): \Psr\Http\Message\ResponseInterface
+    {
+        $templateService = GeneralUtility::makeInstance(\ServerKnights\SkNewsletterhelper\Service\TemplateService::class);
+        $pageArguments = $this->request->getAttribute('routing');
+        $pageId = $pageArguments->getPageId();
+        $result = $templateService->removeTemplate($pageId);
         return $this->htmlResponse();
     }
 }

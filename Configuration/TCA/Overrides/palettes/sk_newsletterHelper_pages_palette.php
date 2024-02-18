@@ -18,18 +18,18 @@ $tca_newsletter_helper_palette = [
       #      ],
       #  ],
 
-        'tx_sk_newsletter_helper_layout_select' => [
-            'exclude' => false,
-            'label' => 'Ausgewähltes Layout',
-            //'displayCond' => 'FIELD:tx_sk_newsletter_helper_is_newsletter:REQ:true',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => array(
-                    array('Newsletter.html', "EXT:sk_newsletterhelper/Resources/Private/Templates/Newsletter.html"),
-                )
-            ],
-        ],
+      #  'tx_sk_newsletter_helper_layout_select' => [
+      #      'exclude' => false,
+      #      'label' => 'Ausgewähltes Layout',
+      #      //'displayCond' => 'FIELD:tx_sk_newsletter_helper_is_newsletter:REQ:true',
+      #      'config' => [
+      #          'type' => 'select',
+      #          'renderType' => 'selectSingle',
+      #          'items' => array(
+      #              array('Newsletter.html', "EXT:sk_newsletterhelper/Resources/Private/Templates/Newsletter.html"),
+      #          )
+      #      ],
+      #  ],
 
     ],
 ];

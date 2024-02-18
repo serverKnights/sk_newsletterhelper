@@ -33,6 +33,7 @@ async function initSave(element) {
             }).then(function(response) {
                 return response.text();
             });
+            alert("The Layout was saved")
         });
 
     });

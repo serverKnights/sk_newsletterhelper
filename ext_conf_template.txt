@@ -7,3 +7,9 @@ NodePath =
 
 # cat=Executable; type=string; label=Path to node_modules Folder
 NodeModulesPath =
+
+# cat=Templates; type=string; label=Extension name containing Templates e.g. sk_newsletterhelper
+ExtensionName =
+
+# cat=Templates; type=string; label=Path to folder containing Templates e.g. /Resources/Private/Basetemplates
+TemplatePath =

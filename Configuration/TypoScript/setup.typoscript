@@ -49,6 +49,35 @@ ajax_sknewsletterhelper_pluginSave {
 
 }
 
+sknewsletterhelper_pluginReset = PAGE
+sknewsletterhelper_pluginReset {
+    typeNum = 1708283669
+    config {
+        disableAllHeaderCode = 1
+        additionalHeaders.10.header = Content-type:text/html
+        no_cache = 1
+        contentObjectExceptionHandler = 0
+    }
+
+    99999999 = COA
+    99999999 {
+        10 = USER
+        10 {
+            userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+            extensionName = SkNewsletterhelper
+            pluginName = Newsletterhelper
+            vendorName = ServerKnights
+            controller = NewsletterHelper
+            switchableControllerActions {
+                NewsletterHelper {
+                    1 = resetLayout
+                }
+            }
+        }
+    }
+
+}
+
 page = PAGE
 page {
     config {

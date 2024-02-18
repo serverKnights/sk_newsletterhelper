@@ -9,16 +9,13 @@
 <f:section name="Content">
 
     <f:for each="{templates}" as="template">
-
-        <f:form method="POST">
-            <f:form.textfield type="text" name="templatePath" value="{template}" />
-            <f:form.submit value="Template1" />
+        <f:form method="POST" name="template">
+            <f:form.hidden property="path" value="{template.path}"/>
+            <f:form.submit value="{template.name}"/>
         </f:form>
 
     </f:for>
 
 </f:section>
 <f:comment>TODO render more beatiful and specific name with little cover image</f:comment>
-
-
 </html>
