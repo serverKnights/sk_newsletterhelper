@@ -7,8 +7,8 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 class ExtentionConfigurationService
 {
     private ExtensionConfiguration $extensionConfiguration;
-    private String $extentionNodePath;
-    private String $extentionMjmlPath;
+    private $extentionNodePath;
+    private $extentionMjmlPath;
     public function init()
     {
         $this->extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class);
@@ -79,7 +79,12 @@ class ExtentionConfigurationService
 
 
     private function setPath($nodePath,$mjmlPath){
-        $this->extensionConfiguration->set('sk_newsletterhelper', ["NodePath" => $nodePath, "NodeModulesPath" => $mjmlPath]);
+        $this->extensionConfiguration->set('sk_newsletterhelper', [
+            "NodePath" => $nodePath,
+            "NodeModulesPath" => $mjmlPath,
+            "ExtensionName" => $this->extensionConfiguration->get('sk_newsletterhelper', 'ExtensionName'),
+            "TemplatePath" => $this->extensionConfiguration->get('sk_newsletterhelper', 'TemplatePath')
+        ]);
     }
 
     public function checkAndSetNode(){

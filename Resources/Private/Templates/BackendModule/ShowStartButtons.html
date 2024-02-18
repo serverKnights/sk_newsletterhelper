@@ -38,13 +38,13 @@
             <f:then>
                 <f:form method="POST">
                     <f:form.textfield name="checkAndSetMjml" value="true" type="hidden"></f:form.textfield>
-                    <f:form.textfield type="submit" value="Scan and set MJML path"></f:form.textfield>
+                    <f:form.textfield type="submit" value="Scan and set node_modules path containing Mjml"></f:form.textfield>
                 </f:form>
             </f:then>
         </f:if>
         <f:if condition="{isMjmlPresent}">
             <f:then>
-                <p style="color: green">MJml path set to {mjmlPath}</p>
+                <p style="color: green">node_modules path set to {mjmlPath}</p>
             </f:then>
         </f:if>
         <f:if condition="{isMjmlPresent} === false ">
