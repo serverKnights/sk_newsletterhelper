@@ -34,20 +34,19 @@ const init = div =>
 
 document.addEventListener("DOMContentLoaded", async function() {
     var elements = document.getElementsByClassName("sk-text");
-
+    const styleTag = document.createElement('style');
+    styleTag.innerHTML = '.ck-content { padding: 0 !important; }'; // Your CSS rule
+    document.getElementsByTagName('head')[0].appendChild(styleTag);
     for (var i = 0; i < elements.length; i++) {
         var id = elements[i].className.replace("sk-text ", "");
         elements[i].children[0].setAttribute("id", id);
         const editor = await init(document.querySelector( "#"+id ));
-        editor.sourceElement.style.padding = "0";
+        editor.sourceElement.style.setProperty('padding', '0', 'important');
         editor.model.document.on( 'change:data', () => {
             const id = editor.sourceElement.getAttribute("id");
             //console.log( document.getElementById("sk-mjml-template").querySelector('[css-class="sk-text '+id+'"]').innerHTML );
             document.getElementById("sk-mjml-template").querySelector('[css-class="sk-text '+id+'"]').innerHTML = editor.sourceElement.innerHTML;
 
-        });
-        editor.model.document.on( 'change', () => {
-            editor.sourceElement.style.padding = "0";
         });
 
     }
