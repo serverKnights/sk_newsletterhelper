@@ -1,6 +1,9 @@
 import RegularEvent from '@typo3/core/event/regular-event.js';
 
-new RegularEvent('submit', function (e) {
-    var loadingIcon = document.getElementById('loadingOverlay');
-    loadingIcon.style.display = 'flex';
-}).bindTo(document.querySelector('#mjmlInstallForm'));
+var install_form = document.querySelector('#sk_mjmlInstallForm')
+if(install_form != null){
+    new RegularEvent('submit', function (e) {
+        var loadingIcon = document.getElementById('sk_loadingOverlay');
+        loadingIcon.style.display = 'flex';
+    }).bindTo(install_form);
+}

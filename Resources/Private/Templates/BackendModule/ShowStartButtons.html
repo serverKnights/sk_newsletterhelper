@@ -50,7 +50,7 @@
         <f:if condition="{isMjmlPresent} === false ">
             <f:then>
                 <p style="color: red">Please install mjml on your system or use the installation button</p>
-                <f:form method="POST" id="mjmlInstallForm">
+                <f:form method="POST" id="sk_mjmlInstallForm">
                     <f:form.textfield name="installMJML" value="true" type="hidden"></f:form.textfield>
                     <f:form.textfield type="submit" value="Install MJML"></f:form.textfield>
                 </f:form>
