@@ -215,9 +215,7 @@ class BackendModuleController extends ActionController
     {
         $presetGroups = [
             'desktop' => [],
-            'tablet' => [],
             'mobile' => [],
-            'unidentified' => [],
         ];
         $previewFrameWidthConfig = BackendUtility::getPagesTSconfig($pageId)['mod.']['web_view.']['previewFrameWidths.'] ?? [];
         foreach ($previewFrameWidthConfig as $item => $conf) {
@@ -240,8 +238,6 @@ class BackendModuleController extends ActionController
 
             if (array_key_exists($data['type'], $presetGroups)) {
                 $presetGroups[$data['type']][$data['key']] = $data;
-            } else {
-                $presetGroups['unidentified'][$data['key']] = $data;
             }
         }
 
